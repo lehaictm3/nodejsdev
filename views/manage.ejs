@@ -1,50 +1,51 @@
 <% include block/header.ejs %>
 <%function youtube_parser(url){
-    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
-    var match = url.match(regExp);
-    return (match&&match[7].length==11)? match[7] : false;
+	var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+	var match = url.match(regExp);
+	return (match&&match[7].length==11)? match[7] : false;
 }
 %>
-    <!-- Page Content -->
-    <div class="container">
 
-        <div class="row">
-            <center><h1>Trang Quản Lý</h1></center>
-            <div class="col-md-12">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th width="50px">ID</th>
-                            <th width="150px">Video Clip</th>
-                            <th>Tên Video</th>
-                            <th width="200px">Người Đăng</th>
-                            <th width="50px">Ẩn</th>
-                            <th width="50px">Sửa</th>
-                            <th width="50px">Xóa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% var stt = 0 %>
-                   <% data.forEach(function(item){%>
-                   <% stt = stt+1%>
-                        <tr valign="middle">
-                            <td> <%= stt%> </td>
-                            <td>
-                                <iframe width="150" height="100" src="https://www.youtube.com/embed/<%=youtube_parser(item.link)%>" frameborder="0" allowfullscreen></iframe>
-                            </td>
-                            <td><%= item.titlevideo%></td>
-                            <td><%= item.username %> </td>
-                            <td><a href="/quanly/status/<%= item._id%>">Ẩn</a></td>
-                            <td><a href="/quanly/edit/<%= item._id%>">Sửa</a></td>
-                            <td><a href="/quanly/del/<%= item._id%>">Xóa</a></td>
-                        </tr>
-                       <% }); %>
-                    </tbody>
-                </table>
-            </div>
+	<!-- Page Content -->
+	<div class="container">
 
-        </div>
-        <!-- /.row -->
-        <hr>
+		<div class="row">
+			<center><h1>Trang Quản Lý</h1></center>
+			<div class="col-md-12">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th width="50px">ID</th>
+							<th width="150px">Video Clip</th>
+							<th>Tên Video</th>
+							<th width="200px">Người Đăng</th>
+							<th width="50px">Ẩn</th>
+							<th width="50px">Sửa</th>
+							<th width="50px">Xóa</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% var stt = 0 %>
+				   <% data.forEach(function(item){%>
+				   <% stt = stt+1%>
+						<tr valign="middle">
+							<td> <%= stt%> </td>
+							<td>
+								<iframe width="150" height="100" src="https://www.youtube.com/embed/<%=youtube_parser(item.link)%>" frameborder="0" allowfullscreen></iframe>
+							</td>
+							<td><%= item.titlevideo%></td>
+							<td><%= item.username %> </td>
+							<td><a href="/quanly/status/<%= item._id%>">Ẩn</a></td>
+							<td><a href="/quanly/edit/<%= item._id%>">Sửa</a></td>
+							<td><a href="/quanly/del/<%= item._id%>" onclick='ConfirmDelete()'>Xóa</a></td>
+						</tr>
+					   <% }); %>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+		<!-- /.row -->
+		<hr>
 
 <% include block/footer.ejs %>

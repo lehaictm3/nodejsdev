@@ -27,6 +27,36 @@ router.get('/', function(req, res, next) {
   res.render('index');
 });
 
+router.get('/quanly/del/:id', function(req, res, next) {
+  var id = req.params.id;
+    var ObjectId = require('mongodb').ObjectId;
+    var o_id = new ObjectId(id);
+
+
+    const removeDocument = function(db, callback) {
+        // Get the documents collection
+        const collection = db.collection('documents');
+        // Delete document where a is 3
+        collection.deleteOne({ _id : o_id }, function(err, result) {
+            assert.equal(err, null);
+
+        });
+    }
+    MongoClient.connect(url, function(err, client) {
+        assert.equal(null, err);
+
+        const db = client.db(dbName);
+
+        removeDocument(db, function() {
+            client.close();
+        });
+
+    });
+
+    res.redirect("/quanly");
+
+
+});
 
 router.get('/chi-tiet', function(req, res, next) {
   res.render('post');
@@ -58,7 +88,8 @@ router.post('/upload', function(req, res, next) {
           'username' : req.body.txtFullName,
           'link'     : req.body.txtLink,
           'email'     : req.body.txtemail,
-          'intro'     : req.body.txtIntro
+          'intro'     : req.body.txtIntro,
+          'titlevideo'  : req.body.txtnamevideo
 
       };
 
@@ -86,7 +117,7 @@ router.post('/upload', function(req, res, next) {
 
           });
 
-    res.redirect("/");
+    res.redirect("/quanly");
 });
 
 
