@@ -80,6 +80,69 @@ router.get('/quanly', function(req, res, next) {
       });
 
 });
+router.get('/edit/:id', function(req, res, next) {
+    var id = req.params.id
+    var ObjectId = require('mongodb').ObjectId;
+    var o_id = new ObjectId(id);
+
+    const findDocuments = function(db, callback) {
+        const collection = db.collection('documents');
+        collection.find({_id : o_id }).toArray(function(err, docs) {
+            assert.equal(err, null);
+            callback(docs);
+        });
+    }
+    MongoClient.connect(url, function(err, client) {
+        assert.equal(null, err);
+        const db = client.db(dbName);
+        findDocuments(db, function(data) {
+            res.render('edit',{data : data[0]});
+
+            client.close();
+        });
+    });
+
+});
+router.post('/edit/:id', function(req, res, next) {
+    var id = req.params.id
+    var ObjectId = require('mongodb').ObjectId;
+    var o_id = new ObjectId(id);
+    var data = {
+        'username' : req.body.txtFullName,
+        'link'     : req.body.txtLink,
+        'email'     : req.body.txtemail,
+        'intro'     : req.body.txtIntro,
+        'titlevideo'  : req.body.txtnamevideo
+
+    };
+
+    const updateDocument = function(db, callback) {
+        const collection = db.collection('documents');
+        collection.updateOne({ _id : o_id }
+            , { $set: data }, function(err, result) {
+                assert.equal(err, null);
+                callback(result);
+            });
+    }
+
+    MongoClient.connect(url, function(err, client) {
+        assert.equal(null, err);
+
+        const db = client.db(dbName);
+
+        updateDocument(db, function() {
+            client.close();
+        });
+
+    });
+
+    res.redirect("/quanly");
+    });
+
+
+
+
+
 router.get('/upload', function(req, res, next) {
     res.render('upload');
 });
